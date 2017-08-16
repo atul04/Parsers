@@ -1,0 +1,359 @@
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-START LL(1) START=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-
+
+Test Case 1 :
+
+Enter Terminals (,) : a,b,c,d,e,@
+No. of Non - Terminals  : 6
+NonTerminals : S
+Productions (,) : ABCDE
+NonTerminals : A
+Productions (,) : a,@
+NonTerminals : B
+Productions (,) : b,@
+NonTerminals : C
+Productions (,) : c
+NonTerminals : D
+Productions (,) : d,@
+NonTerminals : E
+Productions (,) : e,@
+Start Symbol :  S
+Productions : 
+B --> b | @ | 
+E --> e | @ | 
+S --> ABCDE | 
+A --> a | @ | 
+D --> d | @ | 
+C --> c | 
+
+After Left Recurions Productions : 
+B --> b | @ | 
+E --> e | @ | 
+S --> ABCDE | 
+A --> a | @ | 
+D --> d | @ | 
+C --> c | 
+Grammar Rule				First				Follow
+B				['b', '@']				['c']
+E				['@', 'e']				['$']
+S				['c', 'a', 'b']				['$']
+A				['a', '@']				['c', 'b']
+D				['@', 'd']				['e', '$']
+C				['c']				['e', 'd', '$']
+{'c': 3, 'b': 2, 'e': 5, 'a': 1, '$': 7, '@': 6, 'd': 4} 
+ {'B': 1, 'E': 2, 'S': 3, 'A': 4, 'D': 5, 'C': 6}
+		 a		  b		  c		  d		  e		  @		  $		  
+B		0		Bb		B@		0		0		0		0		
+E		0		0		0		0		Ee		0		E@		
+S		SABCDE		SABCDE		SABCDE		0		0		0		0		
+A		Aa		A@		A@		0		0		0		0		
+D		0		0		0		Dd		D@		0		D@		
+C		0		0		Cc		0		0		0		0		
+String to Parse :  abc
+stack [S, $]  Exp :  a
+stack [A, B, C, D, E, $]  Exp :  a
+stack [a, B, C, D, E, $]  Exp :  a
+stack [B, C, D, E, $]  Exp :  b
+stack [b, C, D, E, $]  Exp :  b
+stack [C, D, E, $]  Exp :  c
+stack [c, D, E, $]  Exp :  c
+Unsuccessful Attempt
+
+Why Unsuccessful ?
+
+Ans : - '$' is not there.
+
+
+Test Case 2 :
+
+Here , '#' means 'id'  and  '@' means 'eps'
+
+Enter Terminals (,) : +,-,*,/,(,),#,@
+No. of Non - Terminals  : 5
+NonTerminals : E
+Productions (,) : TP
+NonTerminals : P
+Productions (,) : +TP,-TP,@
+NonTerminals : T
+Productions (,) : FQ
+NonTerminals : Q
+Productions (,) : *FQ,/FQ,@
+NonTerminals : F
+Productions (,) : (E),#
+Start Symbol :  E
+Productions : 
+P --> +TP | -TP | @ | 
+F --> (E) | # | 
+Q --> *FQ | /FQ | @ | 
+E --> TP | 
+T --> FQ | 
+
+After Left Recurions Productions : 
+P --> +TP | -TP | @ | 
+F --> (E) | # | 
+Q --> *FQ | /FQ | @ | 
+E --> TP | 
+T --> FQ | 
+Grammar Rule				First				Follow
+P				['+', '@', '-']				[')', '$']
+F				['(', '#']				['+', '/', ')', '$', '*', '-']
+Q				['/', '*', '@']				[')', '$', '+', '-']
+E				['(', '#']				[')', '$']
+T				['(', '#']				[')', '$', '+', '-']
+{'+': 1, '/': 4, '#': 7, ')': 6, '*': 3, '$': 9, '(': 5, '-': 2, '@': 8} 
+ {'P': 1, 'F': 2, 'Q': 3, 'E': 4, 'T': 5}
+		 +		  -		  *		  /		  (		  )		  #		  @		  $		  
+P		P+TP		P-TP		0		0		0		P@		0		0		P@		
+F		0		0		0		0		F(E)		0		F#		0		0		
+Q		Q@		Q@		Q*FQ		Q/FQ		0		Q@		0		0		Q@		
+E		0		0		0		0		ETP		0		ETP		0		0		
+T		0		0		0		0		TFQ		0		TFQ		0		0		
+String to Parse :  #+#*#$
+stack [E, $]  Exp :  #
+stack [T, P, $]  Exp :  #
+stack [F, Q, P, $]  Exp :  #
+stack [#, Q, P, $]  Exp :  #
+stack [Q, P, $]  Exp :  +
+stack [@, P, $]  Exp :  +
+stack [P, $]  Exp :  +
+stack [+, T, P, $]  Exp :  +
+stack [T, P, $]  Exp :  #
+stack [F, Q, P, $]  Exp :  #
+stack [#, Q, P, $]  Exp :  #
+stack [Q, P, $]  Exp :  *
+stack [*, F, Q, P, $]  Exp :  *
+stack [F, Q, P, $]  Exp :  #
+stack [#, Q, P, $]  Exp :  #
+stack [Q, P, $]  Exp :  $
+stack [@, P, $]  Exp :  $
+stack [P, $]  Exp :  $
+stack [@, $]  Exp :  $
+stack [$]  Exp :  $
+Successfully Parsed
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-END LL(1) END =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= START LR(0) START=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Test Case 1 :
+
+Enter Terminals (|) : +|(|)|*|@|#
+No. of Non - Terminals  : 3
+NonTerminals : E
+Productions (|) : E+T|T
+NonTerminals : T
+Productions (|) : T*F|F
+NonTerminals : F
+Productions (|) : (E)|#
+Start Symbol :  E
+Productions : 
+E --> E+T | T | 
+T --> T*F | F | 
+F --> (E) | # | 
+canonicals Items : 
+1 [['start', '.E$'], ['E', '.E+T'], ['E', '.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+2 [['F', '(.E)'], ['E', '.E+T'], ['E', '.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+3 [['F', '#.']]
+4 [['start', 'E.$'], ['E', 'E.+T']]
+5 [['E', 'T.'], ['T', 'T.*F']]
+6 [['T', 'F.']]
+7 [['F', '(E.)'], ['E', 'E.+T']]
+8 [['E', 'E+.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+9 [['T', 'T*.F'], ['F', '.(E)'], ['F', '.#']]
+10 [['F', '(E).']]
+11 [['E', 'E+T.'], ['T', 'T.*F']]
+12 [['T', 'T*F.']]
+state Transitions : 
+1 ['s', 1, 2, '(']
+2 ['s', 1, 3, '#']
+3 ['g', 1, 4, 'E']
+4 ['g', 1, 5, 'T']
+5 ['g', 1, 6, 'F']
+6 ['s', 2, 2, '(']
+7 ['s', 2, 3, '#']
+8 ['g', 2, 7, 'E']
+9 ['g', 2, 5, 'T']
+10 ['g', 2, 6, 'F']
+11 ['s', 4, 8, '+']
+12 ['s', 5, 9, '*']
+13 ['s', 7, 8, '+']
+14 ['s', 7, 10, ')']
+15 ['s', 8, 2, '(']
+16 ['s', 8, 3, '#']
+17 ['g', 8, 11, 'T']
+18 ['g', 8, 6, 'F']
+19 ['s', 9, 2, '(']
+20 ['s', 9, 3, '#']
+21 ['g', 9, 12, 'F']
+22 ['s', 11, 9, '*']
+rule :
+['E', 'E+T.']
+['E', 'T.']
+['T', 'T*F.']
+['T', 'F.']
+['F', '(E).']
+['F', '#.']
+reduce
+1 []
+2 []
+3 [5]
+4 []
+5 [1]
+6 [3]
+7 []
+8 []
+9 []
+10 [4]
+11 [0]
+12 [2]
+accept :  4
+['+', '(', ')', '*', '@', '#', '$', 'E', 'T', 'F']
+Parse Table
+ 		+	(	)	*	@	#	$	E	T	F	
+0		-	s1	-	-	-	s2	-	g3	g4	g5	
+1		-	s1	-	-	-	s2	-	g6	g4	g5	
+2		r5	r5	r5	r5	r5	r5	r5	-	-	-	
+3		s7	-	-	-	-	-	a	-	-	-	
+4		r1	r1	r1	r1	r1	r1	r1	-	-	-	
+5		r3	r3	r3	r3	r3	r3	r3	-	-	-	
+6		s7	-	s9	-	-	-	-	-	-	-	
+7		-	s1	-	-	-	s2	-	-	g10	g5	
+8		-	s1	-	-	-	s2	-	-	-	g11	
+9		r4	r4	r4	r4	r4	r4	r4	-	-	-	
+10		r0	r0	r0	r0	r0	r0	r0	-	-	-	
+11		r2	r2	r2	r2	r2	r2	r2	-	-	-	
+String : #+#*#
+stack [0]		 #+#*#$		 0
+stack [2, #, 0]		 #+#*#$		 1
+stack [5, F, 0]		 #+#*#$		 1
+stack [4, T, 0]		 #+#*#$		 1
+stack [3, E, 0]		 #+#*#$		 1
+stack [7, +, 3, E, 0]		 #+#*#$		 2
+stack [2, #, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [5, F, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [10, T, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [3, E, 0]		 #+#*#$		 3
+Traceback (most recent call last):
+  File "C:\Users\atuls\Documents\python\Compiler\LR(0).py", line 268, in <module>
+    if(parseString(rule,string)):
+  File "C:\Users\atuls\Documents\python\Compiler\LR(0).py", line 161, in parseString
+    pt = int(pt)
+ValueError: invalid literal for int() with base 10: ''
+
+=> Can't Parse ................. because it didn't make use of look Ahead symbol that's why
+
+=-=-=-=-==--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=END    LR(0)     END =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-===-=-=-=-=-=-=- START SLR(1) START -=-=-=-=-=-=-=-=-=-=-=--=--=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-
+
+parse the string( which is not done by the LR(0) ) 
+
+Enter Terminals (|) : +|(|)|*|@|#
+No. of Non - Terminals  : 3
+NonTerminals : E
+Productions (|) : E+T|T
+NonTerminals : T
+Productions (|) : T*F|F
+NonTerminals : F
+Productions (|) : (E)|#
+Start Symbol :  E
+Productions : 
+E --> E+T | T | 
+F --> (E) | # | 
+T --> T*F | F | 
+canonicals Items : 
+1 [['start', '.E$'], ['E', '.E+T'], ['E', '.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+2 [['F', '(.E)'], ['E', '.E+T'], ['E', '.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+3 [['F', '#.']]
+4 [['start', 'E.$'], ['E', 'E.+T']]
+5 [['T', 'F.']]
+6 [['E', 'T.'], ['T', 'T.*F']]
+7 [['F', '(E.)'], ['E', 'E.+T']]
+8 [['E', 'E+.T'], ['T', '.T*F'], ['T', '.F'], ['F', '.(E)'], ['F', '.#']]
+9 [['T', 'T*.F'], ['F', '.(E)'], ['F', '.#']]
+10 [['F', '(E).']]
+11 [['E', 'E+T.'], ['T', 'T.*F']]
+12 [['T', 'T*F.']]
+state Transitions : 
+1 ['s', 1, 2, '(']
+2 ['s', 1, 3, '#']
+3 ['g', 1, 4, 'E']
+4 ['g', 1, 5, 'F']
+5 ['g', 1, 6, 'T']
+6 ['s', 2, 2, '(']
+7 ['s', 2, 3, '#']
+8 ['g', 2, 7, 'E']
+9 ['g', 2, 5, 'F']
+10 ['g', 2, 6, 'T']
+11 ['s', 4, 8, '+']
+12 ['s', 6, 9, '*']
+13 ['s', 7, 8, '+']
+14 ['s', 7, 10, ')']
+15 ['s', 8, 2, '(']
+16 ['s', 8, 3, '#']
+17 ['g', 8, 5, 'F']
+18 ['g', 8, 11, 'T']
+19 ['s', 9, 2, '(']
+20 ['s', 9, 3, '#']
+21 ['g', 9, 12, 'F']
+22 ['s', 11, 9, '*']
+rule :
+['E', 'E+T.']
+['E', 'T.']
+['F', '(E).']
+['F', '#.']
+['T', 'T*F.']
+['T', 'F.']
+reduce
+1 []
+2 []
+3 [3]
+4 []
+5 [5]
+6 [1]
+7 []
+8 []
+9 []
+10 [2]
+11 [0]
+12 [4]
+accept :  4
+['+', '(', ')', '*', '@', '#', '$', 'E', 'F', 'T']
+Grammar Rule				First				Follow
+E				['*', '(', '+', '#']				['$', '+', ')']
+F				['(', '#']				['$', '*', '+', ')']
+T				['*', '(', '#']				['$', '*', '+', ')']
+Parse Table
+ 		+	(	)	*	@	#	$	E	F	T	
+0		-	s1	-	-	-	s2	-	g3	g4	g5	
+1		-	s1	-	-	-	s2	-	g6	g4	g5	
+2		r3	-	r3	r3	-	-	r3	-	-	-	
+3		s7	-	-	-	-	-	a	-	-	-	
+4		r5	-	r5	r5	-	-	r5	-	-	-	
+5		r1	-	r1	s8	-	-	r1	-	-	-	
+6		s7	-	s9	-	-	-	-	-	-	-	
+7		-	s1	-	-	-	s2	-	-	g4	g10	
+8		-	s1	-	-	-	s2	-	-	g11	-	
+9		r2	-	r2	r2	-	-	r2	-	-	-	
+10		r0	-	r0	s8	-	-	r0	-	-	-	
+11		r4	-	r4	r4	-	-	r4	-	-	-	
+String : #+#*#
+stack [0]		 #+#*#$		 0
+stack [2, #, 0]		 #+#*#$		 1
+stack [4, F, 0]		 #+#*#$		 1
+stack [5, T, 0]		 #+#*#$		 1
+stack [3, E, 0]		 #+#*#$		 1
+stack [7, +, 3, E, 0]		 #+#*#$		 2
+stack [2, #, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [4, F, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [10, T, 7, +, 3, E, 0]		 #+#*#$		 3
+stack [8, *, 10, T, 7, +, 3, E, 0]		 #+#*#$		 4
+stack [2, #, 8, *, 10, T, 7, +, 3, E, 0]		 #+#*#$		 5
+stack [11, F, 8, *, 10, T, 7, +, 3, E, 0]		 #+#*#$		 5
+stack [10, T, 7, +, 3, E, 0]		 #+#*#$		 5
+stack [3, E, 0]		 #+#*#$		 5
+accepted
+
+=-=-==-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= END SLR(1) END =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-===-=-=-=-====-=-=-=-===-=-==-=-=-=-=-
